@@ -62,7 +62,6 @@ Pytest can then be called using the command line where it will iterate through a
 pytest
 ```
 
-
 ## Writing Pytest unit tests
 
 Simple pytest unit tests are functions that call specific portions of your code, pass in defined variables and then check the output, verifying it's what should be expected. 
@@ -157,9 +156,9 @@ def test_check_status_exception(status, expected):
       result = check_status(status)
 ```
 
-In this function, we're still passing in all our variables and whether we expect them to fail or not, but we're not only checking a True or False statement but we're also checking that a particular exception is being raised when it should be (ValueError).
+In this function, we're still passing in all our variables and whether we expect them to fail or not, but we're not only checking a True or False statement, we're also checking that a particular exception is being raised when it should be (ValueError).
 
-To summarise, if unit tests are written correctly then we can check our functions and verify if they're working and we have a number of tools within Pytest at our disposal to successfully achieve this and more detailed information and examples can be found in the pytest documentation linked at the top of the page. The next step is to generate coverage reports to ensure we have written tests for all of our code.
+To summarise, if unit tests are written correctly then we can check our functions and verify if they're working and we have a number of tools within Pytest at our disposal to successfully achieve this. More detailed information and examples can be found in the pytest documentation linked at the top of the page. The next step is to generate coverage reports to ensure we have written tests for all of our code.
 
 ## Code coverage reports
 
