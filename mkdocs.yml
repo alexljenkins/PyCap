@@ -1,0 +1,104 @@
+site_name: "PyCap"
+site_description: "Evolving repo of course material for the PyCap courses"
+site_url: "https://CapgeminiInventIDE.github.io/PyCap"
+repo_url: "https://github.com/CapgeminiInventIDE/PyCap"
+repo_name: "CapgeminiInventIDE/PyCap"
+edit_uri: "/CapgeminiInventIDE/PyCap/edit/main/docs/"
+
+nav:
+  - Welcome: index.md
+  - Courses:
+    - Introduction To Python:
+      - Summary: intro-to-python/summary.md
+      - Project:
+        - Tasks: intro-to-python/project/tasks.md
+      - Week 1:
+        - Data Structures: intro-to-python/week-1.0.md
+        - Functions: intro-to-python/week-1.1.md
+        - Control Flow: intro-to-python/week-1.2.md
+      - Week 2:
+        - Using User Defined, Internal and External Libraries: intro-to-python/week-2.0.md
+        - Object Oriented Programming: intro-to-python/week-2.1.md
+        - Input/Output: intro-to-python/week-2.2.md
+      - Week 3:
+        - Workflow - Unit Testing: intro-to-python/week-3.0.md
+        - Workflow - Formatting: intro-to-python/week-3.1.md
+        - Workflow - Type Hints: intro-to-python/week-3.2.md
+      - Week 4:
+        - Handling Errors: intro-to-python/week-4.0.md
+        - Building Commandline Applications: intro-to-python/week-4.1.md
+      - Week 5:
+        - Workflow - Version Control: intro-to-python/week-5.0.md
+        - Building an Open Source Application: intro-to-python/week-5.1.md
+      - Capstone Projects:
+        - Introduction: intro-to-python/capstone/intro.md
+        - Board game emulation: intro-to-python/capstone/board_game.md
+        - Interacting with external API's: intro-to-python/capstone/external_apis.md
+        - Encryption and secrets manager: intro-to-python/capstone/secrets.md
+        - Building a TODO list: intro-to-python/capstone/todo_list.md
+        - Scraping the web for data: intro-to-python/capstone/web_scraping.md
+        - Building a basic search engine: intro-to-python/capstone/cap_search.md
+    # - Advanced Python:
+    #   - Course 1: advanced-python/course-1.md
+  - Mentors: mentors.md
+  - Certified Members: certified.md
+  - Additional Info:
+    - Contributing: contributing.md
+    - Code of Conduct: code_of_conduct.md
+    - Changelog: changelog.md
+    - License: license.md
+    - About Us: about_us.md
+
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: assets/imgs/index.png
+  favicon: assets/imgs/favicon.png
+  palette:
+    scheme: capgemini
+
+extra_css:
+  - assets/css/styles.css
+
+extra_javascript:
+  - assets/js/theme.js
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tabbed
+  - toc:
+      permalink: "¤"
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - attr_list
+
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    link: https://github.com/CapgeminiInventIDE
+  - icon: fontawesome/brands/linkedin
+    link: https://www.linkedin.com/company/capgemini-invent
+  - icon: fontawesome/solid/globe
+    link: https://www.capgemini.com/service/invent/
+  - icon: fontawesome/brands/docker
+    link: https://hub.docker.com/orgs/capgeminiinventide
+  - icon: fontawesome/brands/discord
+    link: https://discord.gg/rQcMtVE
+  - icon: fontawesome/brands/instagram
+    link: https://www.instagram.com/capgeminiinvent/
+
+plugins:
+  - search
+  - macros:
+      include_yaml:
+        - data/certifications.yaml
+        - data/mentors.yaml
+        - data/maintainer.yaml

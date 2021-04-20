@@ -1,0 +1,10 @@
+version: "2"
+services:
+  mkdocs:
+    build: .
+    image: capgemini-invent-ide/pycap-mkdocs
+    container_name: pycap-mkdocs
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/docs
