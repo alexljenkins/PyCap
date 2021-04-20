@@ -1,4 +1,5 @@
 import dash
+import dash_table
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
@@ -11,78 +12,14 @@ from pandas_datareader import data as web
 import datetime
 import pandas as pd
 
-from styles import Styles
+
+from table import holdings
+from layout_elements import Elements
 
 df = pd.DataFrame()
 df_of_stocks = pd.DataFrame()
 
 app = dash.Dash(external_stylesheets=[dbc.themes.SKETCHY])
-
-
-class Elements:
-    # ------ CONTENT WRAPER ------ #
-    content = html.Div(id="page-content", style=Styles.content)
-
-    # ------ SIDEBAR ------ #
-    sidebar = html.Div(
-        [
-        html.H2("Sidebar", className="display-4"),
-            html.Hr(),
-            html.P(
-                "A simple sidebar layout with navigation links", className="lead"
-            ),
-            dcc.Input(
-                id='ticker-input',
-                type='text',
-                placeholder="Input Ticker",
-                className="input-group mb-3 form-control"
-            ),
-
-            dbc.Nav(
-                [
-                    dbc.NavLink("Home", href="/", active="exact"),
-                    dbc.NavLink("Holdings", href="/holdings", active="exact"),
-                ],
-                vertical=True,
-                pills=True,
-            ),
-        ],
-        style=Styles.side_nav,
-    )
-
-    # ------ SINGLE STOCK SINGLE DAY CHANGE TICKER ------ #
-    day_change = dbc.Container([
-        dbc.Row([dcc.Graph(id='day-change-indicator', figure={},
-                            config={'displayModeBar':False},
-                            ),
-        dcc.Interval(id='update', n_intervals=0, interval=1000*5)
-    ])])
-    
-    # ------ SINGLE STOCK GRAPH ------ #
-    stock_price_graph = html.Div([dcc.Graph(id='stock-price-graph')], style={'width': 800})
-
-    # ------ MULTI GRAPH ------ #
-    multi_line_graph = dbc.Container([
-        dbc.Row(
-            dbc.Col(html.H1("Mutli-Stock Graph",
-                            className='text-center text-primary mb-4'),
-                    width=12)
-        ),
-        dbc.Row([
-                dcc.Dropdown(id='saved-stocks', multi=True, value=[k.resolve().stem for k in Path("./saved_stocks").glob('*.csv')],
-                            options=[{'label':x, 'value':x}
-                                    for x in [k.resolve().stem for k in Path("./saved_stocks").glob('*.csv')]
-                                ],
-                            ),
-        ], style={"width": 500}), # attempted to make dropdown minimum width :/
-        dbc.Row([
-                dcc.Graph(id='multi-stock-graph', figure={})
-        ], style={'width': 800}),  # Horizontal:start,center,end,between,around
-    ], fluid=True)
-
-    # ------ BUTTON ------ #
-    # NOT YET IMPLEMENTED
-    add_button = dbc.Button("Add to Holdings", className="ml-5 input-group-append btn btn-outline-secondary")
 
 
 app.layout = html.Div([dcc.Location(id="url"), Elements.sidebar, Elements.content])
@@ -95,7 +32,8 @@ def render_page_content(pathname):
         return dbc.Container([
             dbc.Row([Elements.day_change]),
             dbc.Row([Elements.stock_price_graph]),
-            dbc.Row([Elements.multi_line_graph])
+            dbc.Row([Elements.multi_line_graph]),
+            dbc.Row([Elements.holding_table])
         ])
 
     elif pathname == "/holdings":
@@ -170,6 +108,38 @@ def update_multi_ticker_graph(saved_stocks):
     fig.update_yaxes(title_text="Stock Price")
 
     return fig
+
+@app.callback(
+    Output('ticker-table', 'data'),
+    Output('ticker-table', 'columns'),
+    Input('ticker-table', 'data'),
+    Input('ticker-table', 'columns'),
+    Input('ticker-button', 'n_clicks'),
+    Input('ticker-input', 'value')
+)
+def add_stock(rows, columns, n_clicks, ticker):
+    # update only on button click
+    if n_clicks != holdings.clicks:
+        # removes user input from table
+        if ticker in holdings.stocks:
+            holdings.df = holdings.df[holdings.df['Ticker'] != ticker]
+            holdings.stocks.remove(ticker)
+            holdings.clicks = n_clicks
+        
+        # adds user input to table
+        elif not ticker in holdings.stocks:
+            holdings.stocks += [ticker]
+            holdings.update_stocks_current_price()
+            holdings.clicks = n_clicks
+    
+    # Update stocks owned on every call
+    df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
+    holdings.update_stock_quant(df["Owned"])
+
+    # Update holdings value
+    holdings.update_holdings_value()
+
+    return holdings.df.to_dict('records'), holdings.get_column_dict()
 
 if __name__ == '__main__':
     # update_day_change(ticker='GOOGL')

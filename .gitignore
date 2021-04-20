@@ -135,3 +135,6 @@ dmypy.json
 
 # Keys
 **/key.py
+
+# Data files
+**.csv

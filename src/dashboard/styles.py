@@ -14,3 +14,10 @@ class Styles:
         "margin-right": "2rem",
         "padding": "2rem 1rem",
     }
+
+    button = {
+        "margin-bottom": "15px",
+        "position":"relative",
+        "left":"50%",
+        "transform": "translate(-50%, 0)"
+    }

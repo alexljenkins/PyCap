@@ -38,9 +38,9 @@ class HoldingsTable:
         self.df = d['Close'].T
         self.df.reset_index(inplace=True)
         # Ensure there's only 2 columns
-        self.df = self.df[self.df.columns[0:2]]
+        while len(self.df.columns) > 2:
+            self.df = self.df.iloc[:,:-1]
         self.df.columns = ["Ticker", "Close"]
-        # self.df.drop('remove', axis = 1, inplace = True)
         self.df['Owned'] = 0
     
     def update_stock_quant(self, owned_series = None):
@@ -62,57 +62,57 @@ class HoldingsTable:
         self.df['Total Value'] = round(self.df['Close'] * self.df['Owned'].astype(float), 2)
 
 
-app = dash.Dash(__name__)
-app.config['suppress_callback_exceptions']=True
+# app = dash.Dash(__name__)
+# app.config['suppress_callback_exceptions']=True
 holdings = HoldingsTable()
 
-app.layout = html.Div([
-    dcc.Input(
-            id='ticker-input',
-            placeholder='Enter a Company Ticker...',
-            value='',
-            style={'padding': 10}
-        ),
-    html.Button('Add/Remove Company', id = 'ticker-button', n_clicks = 0),
-    dash_table.DataTable(
-        id = 'ticker-table',
-        columns = [{"name": i, "id": i} for i in holdings.df.columns],
-        data = holdings.df.to_dict('records')
-    )
-])
+# app.layout = html.Div([
+#     dcc.Input(
+#             id='ticker-input',
+#             placeholder='Enter a Company Ticker...',
+#             value='',
+#             style={'padding': 10}
+#         ),
+#     html.Button('Add/Remove Company', id = 'ticker-button', n_clicks = 0),
+#     dash_table.DataTable(
+#         id = 'ticker-table',
+#         columns = [{"name": i, "id": i} for i in holdings.df.columns],
+#         data = holdings.df.to_dict('records')
+#     )
+# ])
 
 
-@app.callback(
-    Output('ticker-table', 'data'),
-    Output('ticker-table', 'columns'),
-    Input('ticker-table', 'data'),
-    Input('ticker-table', 'columns'),
-    Input('ticker-button', 'n_clicks'),
-    Input('ticker-input', 'value')
-)
-def add_stock(rows, columns, n_clicks, ticker):
-    # update only on button click
-    if n_clicks != holdings.clicks:
-        # removes user input from table
-        if ticker in holdings.stocks:
-            holdings.df = holdings.df[holdings.df['Ticker'] != ticker]
-            holdings.stocks.remove(ticker)
-            holdings.clicks = n_clicks
+# @app.callback(
+#     Output('ticker-table', 'data'),
+#     Output('ticker-table', 'columns'),
+#     Input('ticker-table', 'data'),
+#     Input('ticker-table', 'columns'),
+#     Input('ticker-button', 'n_clicks'),
+#     Input('ticker-input', 'value')
+# )
+# def add_stock(rows, columns, n_clicks, ticker):
+#     # update only on button click
+#     if n_clicks != holdings.clicks:
+#         # removes user input from table
+#         if ticker in holdings.stocks:
+#             holdings.df = holdings.df[holdings.df['Ticker'] != ticker]
+#             holdings.stocks.remove(ticker)
+#             holdings.clicks = n_clicks
         
-        # adds user input to table
-        elif not ticker in holdings.stocks:
-            holdings.stocks += [ticker]
-            holdings.update_stocks_current_price()
-            holdings.clicks = n_clicks
+#         # adds user input to table
+#         elif not ticker in holdings.stocks:
+#             holdings.stocks += [ticker]
+#             holdings.update_stocks_current_price()
+#             holdings.clicks = n_clicks
     
-    # Update stocks owned on every call
-    df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
-    holdings.update_stock_quant(df["Owned"])
+#     # Update stocks owned on every call
+#     df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
+#     holdings.update_stock_quant(df["Owned"])
 
-    # Update holdings value
-    holdings.update_holdings_value()
+#     # Update holdings value
+#     holdings.update_holdings_value()
 
-    return holdings.df.to_dict('records'), holdings.get_column_dict()
+#     return holdings.df.to_dict('records'), holdings.get_column_dict()
 
 
 
