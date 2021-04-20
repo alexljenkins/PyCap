@@ -12,7 +12,6 @@ from pandas_datareader import data as web
 import datetime
 import pandas as pd
 
-
 from table import holdings
 from layout_elements import Elements
 
@@ -20,7 +19,7 @@ df = pd.DataFrame()
 df_of_stocks = pd.DataFrame()
 
 app = dash.Dash(external_stylesheets=[dbc.themes.SKETCHY])
-
+# app.config['suppress_callback_exceptions']=True
 
 app.layout = html.Div([dcc.Location(id="url"), Elements.sidebar, Elements.content])
 
@@ -30,14 +29,15 @@ def render_page_content(pathname):
     if pathname == "/":
         # return GRAPHS
         return dbc.Container([
-            dbc.Row([Elements.day_change]),
-            dbc.Row([Elements.stock_price_graph]),
-            dbc.Row([Elements.multi_line_graph]),
-            dbc.Row([Elements.holding_table])
+            dbc.Row(Elements.header),
+            dbc.Row(Elements.day_change),
+            dbc.Row(Elements.stock_price_graph),
+            dbc.Row(Elements.holding_header),
+            dbc.Row(Elements.holding_table)
         ])
 
-    elif pathname == "/holdings":
-        return html.P("This is the content of your holdings. Yay!")
+    elif pathname == "/Watchlist":
+        return dbc.Container([dbc.Row([Elements.multi_line_graph_header, Elements.multi_line_graph])])
     
     # 404 message
     return dbc.Jumbotron(
@@ -63,7 +63,8 @@ def update_graph(ticker):
             'x': df.index,
             'y': df.Close
         }],
-        'layout': {'margin': {'l': 40, 'r': 0, 't': 20, 'b': 30}}
+        'layout': {'margin': {'l': 0, 'r': 0, 't': 20, 'b': 30},
+        'width': '800'}
     }
 
 # Indicator Graph
@@ -142,5 +143,4 @@ def add_stock(rows, columns, n_clicks, ticker):
     return holdings.df.to_dict('records'), holdings.get_column_dict()
 
 if __name__ == '__main__':
-    # update_day_change(ticker='GOOGL')
     app.run_server(debug=True)

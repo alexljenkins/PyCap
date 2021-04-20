@@ -21,3 +21,9 @@ class Styles:
         "left":"50%",
         "transform": "translate(-50%, 0)"
     }
+
+    # TODO: not sure why 100% doesn't work for width, need to check how big the container size is :/
+    table = {
+                'width': '800px',
+                # 'minWidth': '100%',
+            }

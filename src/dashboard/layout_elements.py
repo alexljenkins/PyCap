@@ -19,10 +19,10 @@ class Elements:
     # ------ SIDEBAR ------ #
     sidebar = html.Div(
         [
-            html.H2("Sidebar", className="display-4"),
+            html.H2("Controls", className="display-4"),
             html.Hr(),
             html.P(
-                "A simple sidebar layout with navigation links", className="lead"
+                "Just enter a stock ticker below", className="lead"
             ),
             dcc.Input(
                 id='ticker-input',
@@ -30,7 +30,7 @@ class Elements:
                 placeholder="Input Ticker",
                 className="input-group mb-3 form-control"
             ),
-            html.Button(
+            dbc.Button(
                 'Add/Remove Company',
                 id = 'ticker-button',
                 n_clicks = 0,
@@ -39,7 +39,7 @@ class Elements:
             dbc.Nav(
                 [
                     dbc.NavLink("Home", href="/", active="exact"),
-                    dbc.NavLink("Holdings", href="/holdings", active="exact"),
+                    dbc.NavLink("Watchlist", href="/Watchlist", active="exact"),
                 ],
                 vertical=True,
                 pills=True,
@@ -47,6 +47,12 @@ class Elements:
         ],
         style=Styles.side_nav,
     )
+
+    header = html.Div([
+        html.H1("Financial Stocks Dashboard"),
+        html.Hr(),
+        html.P("Type a stock ticker into the sidebar to lookup it's price", className="lead")
+    ])
 
     # ------ SINGLE STOCK SINGLE DAY CHANGE TICKER ------ #
     day_change = dbc.Container([
@@ -59,13 +65,15 @@ class Elements:
     # ------ SINGLE STOCK GRAPH ------ #
     stock_price_graph = html.Div([dcc.Graph(id='stock-price-graph')], style={'width': 800})
 
+    # ------ MULTI GRAPH HEADER ------ #
+    multi_line_graph_header = html.Div([
+        html.H1("Mutli-Stock Graph", className='text-primary mb-4'),
+        html.Hr(),
+        html.P("Shows a graph of all stocks that have been searched and saved to disc", className="lead")
+    ])
+
     # ------ MULTI GRAPH ------ #
     multi_line_graph = dbc.Container([
-        dbc.Row(
-            dbc.Col(html.H1("Mutli-Stock Graph",
-                            className='text-center text-primary mb-4'),
-                    width=12)
-        ),
         dbc.Row([
                 dcc.Dropdown(id='saved-stocks', multi=True, value=[k.resolve().stem for k in Path("./saved_stocks").glob('*.csv')],
                             options=[{'label':x, 'value':x}
@@ -78,12 +86,17 @@ class Elements:
         ], style={'width': 800}),  # Horizontal:start,center,end,between,around
     ], fluid=True)
 
-    # ------ BUTTON ------ #
-    # NOT YET IMPLEMENTED
-    # button = html.Button('Add/Remove Company', id = 'ticker-button', n_clicks = 0)
+    # ------ HOLDINGS HEADER ------ #
+    holding_header = html.Div([
+        html.H3("My Holdings Table"),
+        html.Hr(),
+        # html.P("Type a stock ticker into the sidebar to lookup it's price", className="lead")
+    ])
+
     # ------ HOLDINGS TABLE ------ #
     holding_table = dash_table.DataTable(
         id = 'ticker-table',
         columns = [{"name": i, "id": i} for i in holdings.df.columns],
-        data = holdings.df.to_dict('records')
+        data = holdings.df.to_dict('records'),
+        style_table = Styles.table,
     )
