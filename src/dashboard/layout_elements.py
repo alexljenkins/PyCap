@@ -100,3 +100,6 @@ class Elements:
         data = holdings.df.to_dict('records'),
         style_table = Styles.table,
     )
+
+    # ------ HOLDINGS PIE ------ #
+    holdings_pie = dcc.Graph(id='holdings-pie', figure={})

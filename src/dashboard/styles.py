@@ -9,6 +9,8 @@ class Styles:
         "background-color": "#f8f9fa",
     }
 
+    stock_price_graph = {'margin': {'l': 0, 'r': 0, 't': 20, 'b': 30}, 'width': '800'}
+    
     content = {
         "margin-left": "18rem",
         "margin-right": "2rem",

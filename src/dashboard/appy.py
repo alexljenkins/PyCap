@@ -14,6 +14,7 @@ import pandas as pd
 
 from table import holdings
 from layout_elements import Elements
+from styles import Styles
 
 df = pd.DataFrame()
 df_of_stocks = pd.DataFrame()
@@ -33,7 +34,8 @@ def render_page_content(pathname):
             dbc.Row(Elements.day_change),
             dbc.Row(Elements.stock_price_graph),
             dbc.Row(Elements.holding_header),
-            dbc.Row(Elements.holding_table)
+            dbc.Row(Elements.holding_table),
+            dbc.Row(Elements.holdings_pie)
         ])
 
     elif pathname == "/Watchlist":
@@ -63,9 +65,7 @@ def update_graph(ticker):
             'x': df.index,
             'y': df.Close
         }],
-        'layout': {'margin': {'l': 0, 'r': 0, 't': 20, 'b': 30},
-        'width': '800'}
-    }
+        'layout': Styles.stock_price_graph}
 
 # Indicator Graph
 @app.callback(
@@ -110,6 +110,7 @@ def update_multi_ticker_graph(saved_stocks):
 
     return fig
 
+# HOLDINGS TABLE UPDATE
 @app.callback(
     Output('ticker-table', 'data'),
     Output('ticker-table', 'columns'),
@@ -141,6 +142,17 @@ def add_stock(rows, columns, n_clicks, ticker):
     holdings.update_holdings_value()
 
     return holdings.df.to_dict('records'), holdings.get_column_dict()
+
+# HOLDINGS PIE UPDATE
+@app.callback(
+    Output('holdings-pie', 'figure'),
+    Input('ticker-table', 'data'),
+    Input('ticker-table', 'columns')
+)
+def holdings_pie(rows, columns):
+    df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
+    fig = px.pie(df, values='Total Value', names='Ticker')
+    return fig
 
 if __name__ == '__main__':
     app.run_server(debug=True)
