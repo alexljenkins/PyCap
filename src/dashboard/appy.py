@@ -6,7 +6,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import plotly.express as px
-
+from typing import List, Dict, Union, Tuple
 from pathlib import Path
 from pandas_datareader import data as web
 import datetime
@@ -26,7 +26,8 @@ app.layout = html.Div([dcc.Location(id="url"), Elements.sidebar, Elements.conten
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
-def render_page_content(pathname):
+def render_page_content(pathname:str) -> dbc.Container:
+    """Web display wrapper for each page."""
     if pathname == "/":
         # return GRAPHS
         return dbc.Container([
@@ -51,7 +52,8 @@ def render_page_content(pathname):
     )
 
 @app.callback(Output('stock-price-graph', 'figure'), [Input('ticker-input', 'value')])
-def update_graph(ticker):
+def update_graph(ticker:str) -> Dict[str, Union[List[Dict[str, pd.Series]], Dict[str, str]]]:
+    """ Uses Yahoo API to get the stock ticker price from the start of 2000 to yesterday and returns it in Dash format """
     global df
     df = web.DataReader(
         ticker,
@@ -72,7 +74,8 @@ def update_graph(ticker):
     Output('day-change-indicator', 'figure'),
     Input('update', 'n_intervals')
 )
-def day_change_indicator(ticker):
+def day_change_indicator(ticker:str) -> go.Figure:
+    """ Returns the last day change indicator for the given stock """
     figure = go.Figure(go.Indicator(
         mode="delta",
         value=df.iloc[-1]['Close'],
@@ -92,12 +95,13 @@ def day_change_indicator(ticker):
     Output('multi-stock-graph', 'figure'),
     Input('saved-stocks', 'value')
 )
-def update_multi_ticker_graph(saved_stocks):
+def update_multi_ticker_graph(saved_stocks: List[str]) -> go.Figure:
+    """ Loads any previously saved stocks and returns a multi-stock graph of stock prices over time"""
     fig = go.Figure()
     for stock in saved_stocks:
         stock_df = pd.read_csv(f"./saved_stocks/{stock}.csv")
         if not len(stock_df.index) > 5:
-            print(f"skipping {stock}")
+            print(f"Skipping {stock}")
             continue
         fig.add_trace(go.Scatter(
             x = stock_df['Date'],
@@ -119,7 +123,8 @@ def update_multi_ticker_graph(saved_stocks):
     Input('ticker-button', 'n_clicks'),
     Input('ticker-input', 'value')
 )
-def add_stock(rows, columns, n_clicks, ticker):
+def add_stock(rows:List[Dict[str, Union[str, float, int]]], columns:List[Dict[str, Union[str, bool]]], n_clicks:int, ticker:str) -> Tuple[dict, dict]:\
+    """ Adds a stock to the holdings table (and corresponding pie chart) """
     # update only on button click
     if n_clicks != holdings.clicks:
         # removes user input from table
@@ -149,7 +154,8 @@ def add_stock(rows, columns, n_clicks, ticker):
     Input('ticker-table', 'data'),
     Input('ticker-table', 'columns')
 )
-def holdings_pie(rows, columns):
+def holdings_pie(rows:List[Dict[str, Union[str, float, int]]], columns:List[Dict[str, Union[str, bool]]]) -> px.pie:
+    """ Returns a pie chart of current stock holdings """
     df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
     fig = px.pie(df, values='Total Value', names='Ticker')
     return fig

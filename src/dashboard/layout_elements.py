@@ -13,6 +13,7 @@ from styles import Styles
 from table import holdings
 
 class Elements:
+    """Individual web elements"""
     # ------ CONTENT WRAPER ------ #
     content = html.Div(id="page-content", style=Styles.content)
 

@@ -1,4 +1,5 @@
 class Styles:
+    """CSS stylings for specific elements"""
     side_nav = {
         "position": "fixed",
         "top": 0,
