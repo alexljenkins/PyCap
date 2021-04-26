@@ -38,15 +38,19 @@ The "Watchlist" tab (found on the sidebar menu) showcases all the stocks you've 
 
 - Great starting point for a financial dashboard
 - Can see what a given portfolio would be worth today
+- Simple and intuitive to use
 - Exposure to Dash
 
 ### Cons
 
+- Doesn't provide any value (yet :P)
+- Clicking "add/remove company" while it hasn't finished loading the current ticker figures can bug out the entire application a bit. Likewise, clicking "add/remove" multiple times in quick succession.
 - Doesn't save your Holdings between sessions
 - Only reloads Watchlist stocks from memory - doesn't update with latest prices
 - Cannot enter date/price you paid for a given stock so there's no actual holdings growth statistics
 - Searches for stocks based on user input before clicking a button... so saves "G", "GO", "GOO", "GOOG" and "GOOGL" when searching for google stock.
 - Likewise, searches for stocks with input field being empty, reporting back several errors to the user and saving all of those successful searches to disc - that then show up in the Watchlist graph (couldn't get `app.config['suppress_callback_exceptions']=True` to work)
+- No way to delete stocks on Watchlist (files on disc)
 
 ### Next steps
 

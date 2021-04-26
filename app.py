@@ -6,7 +6,6 @@ import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_table
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -87,6 +86,7 @@ def day_change_indicator(ticker: str) -> go.Figure:
 
     return figure
 
+
 # Multiple Line Chart DROPDOWN MENU
 @app.callback(
     Output("saved-stocks", "options"),
@@ -96,7 +96,7 @@ def update_multi_ticker_dropdown(saved_stocks: List[str]) -> List[Dict[str, str]
     """ Loads any previously saved stocks and returns a multi-stock graph of stock prices over time"""
     # look again for new files
     revised_saved_stocks = [k.resolve().stem for k in saved_stocks_path.glob("*.csv")]
-    
+
     return [{"label": x, "value": x} for x in revised_saved_stocks]
 
 
@@ -143,7 +143,7 @@ def add_stock(
             holdings.clicks = n_clicks
 
         # adds user input to table
-        elif not ticker in holdings.stocks:
+        elif ticker not in holdings.stocks:
             holdings.stocks += [ticker]
             holdings.update_stocks_current_price()
             holdings.clicks = n_clicks

@@ -35,7 +35,7 @@ class HoldingsTable:
             start = datetime.datetime.today() - datetime.timedelta(days=1)
             end = datetime.datetime.today()
             d = web.DataReader(self.stocks, "yahoo", start, end)
-        except:
+        except Exception:
             start = datetime.datetime.today() - datetime.timedelta(days=3)
             end = datetime.datetime.today()
             d = web.DataReader(self.stocks, "yahoo", start, end)
