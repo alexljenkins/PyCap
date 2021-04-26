@@ -4,8 +4,9 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-from styles import Styles
-from table import holdings
+
+from .styles import Styles
+from .table import holdings
 
 
 class Elements:

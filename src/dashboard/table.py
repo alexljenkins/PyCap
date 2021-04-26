@@ -25,10 +25,12 @@ class HoldingsTable:
         """Updates the number of clicks made by a user"""
         if isinstance(new_clicks, int):
             self._clicks = new_clicks
+        else:
+            raise(Exception("int required"))
 
     def update_stocks_current_price(self) -> None:
         """Uses Yahoo API to get yesterdays (or last trading days) closing stock price for all current stocks"""
-        # Can't get yesterdays close price on Monday/Weekends
+        # Can't get yesterdays close price on Sunday/Monday
         try:
             start = datetime.datetime.today() - datetime.timedelta(days=1)
             end = datetime.datetime.today()
