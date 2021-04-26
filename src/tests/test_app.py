@@ -1,21 +1,23 @@
-from selenium import webdriver
-from pathlib import Path
 import time
-from dash.testing.application_runners import import_app
+from pathlib import Path
+
+from selenium import webdriver
 
 APP_PATH = str(Path(__file__).parent.parent.parent.resolve() / "app.py")
+
 
 def selenium_working_example():
     """ Just example code to see how things work
     NOT IN USE"""
     DRIVER = webdriver.Chrome()
-    DRIVER.get('https://www.google.com')
-    time.sleep(5) # Let the user actually see something!
-    search_box = DRIVER.find_element_by_name('q')
-    search_box.send_keys('ChromeDriver')
+    DRIVER.get("https://www.google.com")
+    time.sleep(5)  # Let the user actually see something!
+    search_box = DRIVER.find_element_by_name("q")
+    search_box.send_keys("ChromeDriver")
     search_box.submit()
-    time.sleep(5) # Let the user actually see something!
+    time.sleep(5)  # Let the user actually see something!
     DRIVER.quit()
+
 
 # def test_01_input_ticker_field(dash_duo):
 #     # define your app inside the test function
@@ -40,6 +42,6 @@ def selenium_working_example():
 
 #     assert 1 == 1
 
-    # assert dash_duo.get_logs() == [], "browser console should contain no error"
-    # 8. visual testing with percy snapshot
-    # dash_duo.percy_snapshot("bsly001-layout")
+# assert dash_duo.get_logs() == [], "browser console should contain no error"
+# 8. visual testing with percy snapshot
+# dash_duo.percy_snapshot("bsly001-layout")

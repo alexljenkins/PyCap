@@ -10,6 +10,7 @@ from .table import holdings
 
 sspath = Path(__file__).parent / "saved_stocks"
 
+
 class Elements:
     """Individual web elements"""
 
@@ -79,10 +80,7 @@ class Elements:
                         id="saved-stocks",
                         multi=True,
                         value=[k.resolve().stem for k in sspath.glob("*.csv")],
-                        options=[
-                            {"label": x, "value": x}
-                            for x in [k.resolve().stem for k in sspath.glob("*.csv")]
-                        ],
+                        options=[{"label": x, "value": x} for x in [k.resolve().stem for k in sspath.glob("*.csv")]],
                     ),
                 ],
                 style={"width": 500},

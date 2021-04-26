@@ -26,7 +26,7 @@ class HoldingsTable:
         if isinstance(new_clicks, int):
             self._clicks = new_clicks
         else:
-            raise(Exception("int required"))
+            raise (Exception("int required"))
 
     def update_stocks_current_price(self) -> None:
         """Uses Yahoo API to get yesterdays (or last trading days) closing stock price for all current stocks"""
