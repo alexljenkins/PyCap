@@ -1,10 +1,11 @@
 version: "2"
 services:
-  mkdocs:
+  dashboard:
     build: .
-    image: capgemini-invent-ide/pycap-mkdocs
-    container_name: pycap-mkdocs
+    image: capgemini-invent-ide/dashboard
+    container_name: dashboard
     ports:
-      - "8000:8000"
+      - 8050:8050
     volumes:
-      - .:/docs
+      - .:/opt/working
+    entrypoint: python /opt/working/app.py

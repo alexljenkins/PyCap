@@ -1,0 +1,31 @@
+/* CURRENTLY NOT IN USE */
+.side_nav_a {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 16rem;
+    padding: 2rem 1rem;
+    background-color: #f8f9fa;
+}
+
+.stock_price_graph {
+    margin: 0px 0px 20px 30px;
+    width: 800px}
+
+.content {
+    margin-left: 18rem;
+    margin-right: 2rem;
+    padding: 2rem 1rem;
+}
+
+.button_22 {
+    margin-bottom: 15px;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0)
+}
+
+.table {
+    width: 800px;
+}

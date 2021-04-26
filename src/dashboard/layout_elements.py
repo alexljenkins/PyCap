@@ -5,9 +5,10 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
 
-from .styles import Styles
+from .assets.styles import Styles
 from .table import holdings
 
+sspath = Path(__file__).parent / "saved_stocks"
 
 class Elements:
     """Individual web elements"""
@@ -77,10 +78,10 @@ class Elements:
                     dcc.Dropdown(
                         id="saved-stocks",
                         multi=True,
-                        value=[k.resolve().stem for k in Path("./saved_stocks").glob("*.csv")],
+                        value=[k.resolve().stem for k in sspath.glob("*.csv")],
                         options=[
                             {"label": x, "value": x}
-                            for x in [k.resolve().stem for k in Path("./saved_stocks").glob("*.csv")]
+                            for x in [k.resolve().stem for k in sspath.glob("*.csv")]
                         ],
                     ),
                 ],

@@ -8,7 +8,6 @@ HOLDINGS = HoldingsTable()
 T = pd.Series([5,5,5])
 
 def test_update_stocks_current_price():
-    
     HOLDINGS.stocks = ["TSLA", "AAPL", "GOOGL"]
     HOLDINGS.update_stocks_current_price()
     

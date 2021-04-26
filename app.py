@@ -15,13 +15,14 @@ from dash.dependencies import Input, Output
 from pandas_datareader import data as web
 
 from src.dashboard.layout_elements import Elements
-from src.dashboard.styles import Styles
+from src.dashboard.assets.styles import Styles
 from src.dashboard.table import holdings
 
 df = pd.DataFrame()
 df_of_stocks = pd.DataFrame()
+saved_stocks_path = Path(__file__).parent / "src" / "dashboard" / "saved_stocks"
 
-app = dash.Dash(external_stylesheets=[dbc.themes.SKETCHY])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SKETCHY])
 app.config['suppress_callback_exceptions'] = True
 
 app.layout = html.Div([dcc.Location(id="url"), Elements.sidebar, Elements.content])
@@ -61,7 +62,7 @@ def update_graph(ticker: str) -> Dict[str, Union[List[Dict[str, pd.Series]], Dic
     """ Uses Yahoo API to get the stock ticker price from the start of 2000 to yesterday and returns it in Dash format """
     global df
     df = web.DataReader(ticker, "yahoo", datetime.datetime(2000, 1, 1), datetime.datetime.now())
-    df.to_csv(f"./src/dashboard/saved_stocks/{ticker}.csv", index=True)
+    df.to_csv(saved_stocks_path / f"{ticker}.csv", index=True)
     return {"data": [{"x": df.index, "y": df.Close}], "layout": Styles.stock_price_graph}
 
 
@@ -94,7 +95,7 @@ def day_change_indicator(ticker: str) -> go.Figure:
 def update_multi_ticker_dropdown(saved_stocks: List[str]) -> List[Dict[str, str]]:
     """ Loads any previously saved stocks and returns a multi-stock graph of stock prices over time"""
     # look again for new files
-    revised_saved_stocks = [k.resolve().stem for k in Path("./src/dashboard/saved_stocks").glob("*.csv")]
+    revised_saved_stocks = [k.resolve().stem for k in saved_stocks_path.glob("*.csv")]
     
     return [{"label": x, "value": x} for x in revised_saved_stocks]
 
@@ -105,7 +106,7 @@ def update_multi_ticker_graph(saved_stocks: List[str]) -> go.Figure:
     """ Loads any previously saved stocks and returns a multi-stock graph of stock prices over time"""
     fig = go.Figure()
     for stock in saved_stocks:
-        stock_df = pd.read_csv(f"./src/dashboard/saved_stocks/{stock}.csv")
+        stock_df = pd.read_csv(saved_stocks_path / f"{stock}.csv")
         if not len(stock_df.index) > 5:
             print(f"Skipping {stock}")
             continue
@@ -167,4 +168,4 @@ def holdings_pie(rows: List[Dict[str, Union[str, float, int]]], columns: List[Di
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server("0.0.0.0", port=8050, debug=True)

@@ -10,53 +10,52 @@ This commandline program is a basic implementation for a todo list application u
 
 ## Requirements
 
-This program requires the following Python packages
-
-- [xxx](https://link.com/)
-
-They can be installed manually or using a pipenv with the supplied `Pipfile` by running the following
-
-```bash
-cd todo_list
-pipenv install
-```
+This program requirements can be found in the requirements.txt
 
 ## Usage
-
-To use the program with pipenv simply enter a pipenv shell by running `pipenv shell` or prefix `pipenv run` before any Python command
+You can run `python app.py` in a virtual environment or use the docker commands `docker-compose build` and `docker-compose up`to run the app.
 
 ### Program options
 
-| Description                                          | Usage                                                                                                 |
-|------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| Create a todo                                        | `python todo.py create "Take the washing out"`                                                   |
-| Create multiple todos                                | `python todo.py create "Take the washing out" "Walk the dog"`                                         |
-| Read (list) all todos                                | `python todo.py list-all`                                                                             |
-| Read (list) all todos that contain a given substring | `python todo.py list-all --substring "dog"`                                                           |
-| Read (list) all todos that are complete              | `python todo.py list-all --complete "dog"`                                                            |
-| Read (list) all todos that are not complete          | `python todo.py list --no-complete "dog"`                                                             |
-| Update a todo description                            | `python todo.py toggle "f7f6d502-dc35-40d2-b348-287a714b6978"`                                        |
-| Update the state of a todo                           | `python todo.py update "f7f6d502-dc35-40d2-b348-287a714b6978" "Walk all the dogs"`                    |
-| Delete a todo                                        | `python todo.py delete "f7f6d502-dc35-40d2-b348-287a714b6978"`                                        |
-| Delete multiple todos                                | `python todo.py delete "f7f6d502-dc35-40d2-b348-287a714b6978" "2be6199a-abec-42c8-8744-255cbb152d9c"` |
-| Delete all todos                                     | `python todo.py delete-all`                                                                           |
+#### Searching for a Stock
+You can search for a stock in the input field found in the sidebar.
+Simply typing in a stock (without hitting the button) will search for the stock - returning the historical closing price information in a graph, and the last day open/close change as a green/red indicator above the graph.
+
+#### Add/Removing a Company Stock from your Holdings
+Once you've searched for a stock, you are able to add or remove it to your holdings list by clicking the button `Add/Remove Company`.
+This will add (or remove) it to the "My Holdings Table" section at the bottom.
+
+#### Editing your Holdings Quantity
+Once you've added a stock to your holdings table, you can edit the "Owned" column values to reflect the number of stocks you own of that stock.
+This will automatically update the "Total Value" column of the stock, and update the pie graph representing your holdings.
+
+#### Watchlist
+The "Watchlist" tab (found on the sidebar menu) showcases all the stocks you've previously searched. They have been saved to disc to allow quick reference and offline view.
 
 ## Pros, cons and next steps
 
 ### Pros
 
-- pro 1
-- pro 2
+- Great starting point for a financial dashboard
+- Can see what a given portfolio would be worth today
+- Exposure to Dash
 
 ### Cons
 
-- con 1
-- con 2
+- Doesn't save your Holdings between sessions
+- Only reloads Watchlist stocks from memory - doesn't update with latest prices
+- Cannot enter date/price you paid for a given stock so there's no actual holdings growth statistics
+- Searches for stocks based on user input before clicking a button... so saves "G", "GO", "GOO", "GOOG" and "GOOGL" when searching for google stock.
+- Likewise, searches for stocks with input field being empty, reporting back several errors to the user and saving all of those successful searches to disc - that then show up in the Watchlist graph (couldn't get `app.config['suppress_callback_exceptions']=True` to work)
 
 ### Next steps
 
-- next step 1
-- next step 2
+- Throw it out and start again :P
+- Create unit tests for Dash based sections of code
+- Save Holdings perminantly
+- Add buy in-price/date so you can see holdings growth
+- Maybe find out next dividend payout date or total to-date dividends
+- Sentiment analysis or even just search for company news quantities on twitter/reddit etc.
 
 ## License
 
